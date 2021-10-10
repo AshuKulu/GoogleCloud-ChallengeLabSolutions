@@ -1,0 +1,53 @@
+Perform Foundational Infrastructure Tasks in Google Cloud: Challenge Lab
+
+Challenge Scenario:
+		*Create a bucket
+		*Create a Pub/Sub topic
+		*Create the Cloud Function
+		*Remove the previous cloud engineer
+
+Task 1: Create a bucket
+
+Activate Clous Shell and Run following commands
+
+gcloud auth list
+gcloud config list project
+gsutil mb gs://<YOUR-BUCKET-NAME>
+
+	Replace with <YOUR-BUCKET-NAME>
+	Use your project ID here as bucket name it's globally unique
+
+Task 2: Create a Pub/Sub topic
+
+gcloud pubsub topics create <YOUR-TOPIC-NAME>
+
+	Replace with <YOUR-TOPIC-NAME>
+
+Task 3: Create the thumbnail Cloud Function
+
+In the console, click the Navigation menu > Cloud Functions > Create function
+Then enter the following values:
+	Name : GCFunction
+	Trigger Type : Cloud Storage
+	Event Type : Finalize/Create
+	Browse the bucket you have created and click Save
+	click Next
+	Set Runtime as Node.js 10
+	Entry point : thumbnail
+Then, from lab instructions, replace code for index.js and package.json
+On line 15 of index.js replace the text REPLACE_WITH_YOUR_TOPIC with the name of topic you created in task 2 (<YOUR-TOPIC-NAME>)
+Then, click Deploy
+
+Wait till deployment finished
+Download the image from URL
+	'https://storage.googleapis.com/cloud-training/gsp315/map.jpg'
+Then Go to Navigation menu > STORAGE > Storage > Select your bucket > Upload files
+Upload 'map.jpg' to the bucket
+
+Task 4: Remove the previous cloud engineer
+
+Go to IAM & Admin > IAM
+Search for Username 2 (Qwiklab Console)
+Remove/Delete it
+
+Congratulations! You completed this challenge lab.
