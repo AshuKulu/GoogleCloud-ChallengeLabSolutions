@@ -55,6 +55,9 @@ gcloud compute instance-templates create nginx-template \
 
 gcloud compute target-pools create nginx-pool
 
+if prompts for region [asia-southeast1] for target pool: [Y/n] choose 'n'
+then choose '23' for us-east1 i.e. our default zone
+
 3 .Create a managed instance group :
 
 gcloud compute instance-groups managed create nginx-group \
