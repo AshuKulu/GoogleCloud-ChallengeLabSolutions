@@ -1,0 +1,94 @@
+Deploy and Manage Cloud Environments with Google Cloud: Challenge Lab
+                      https://github.com/AshuKulu
+
+
+##TASK 1 : Create Production Environment
+
+Open VM Instances
+SSH to kraken-jumphost and run the followings
+    Note: All commands written in SSH
+
+cd /work/dm
+
+sed -i s/SET_REGION/us-east1/g prod-network.yaml
+
+gcloud deployment-manager deployments create prod-network --config=prod-network.yaml
+
+gcloud config set compute/zone us-east1-b
+
+gcloud container clusters create kraken-prod \
+          --num-nodes 2 \
+          --network kraken-prod-vpc \
+          --subnetwork kraken-prod-subnet\
+          --zone us-east1-b
+
+gcloud container clusters get-credentials kraken-prod
+
+cd /work/k8s
+
+for F in $(ls *.yaml); do kubectl create -f $F; done
+---
+
+
+##TASK 2 : Setup the Admin instance
+
+gcloud config set compute/zone us-east1-b
+
+gcloud compute instances create kraken-admin --network-interface="subnet=kraken-mgmt-subnet" --network-interface="subnet=kraken-prod-subnet"
+
+In Console Monitoring > Alerting > Create Policy
+Add Condition:
+   Resource Type : GCE VM Instance
+   Metric : CPU utilization
+   Filter : instance_name
+            Value : kraken-admin
+   Condition : is above
+   Threshold : 50%
+   For : 1 minute
+---
+
+
+##TASK 3 : Verify the Spinnaker deployment
+
+Open Cloudshell and run
+
+gcloud config set compute/zone us-east1-b
+
+gcloud container clusters get-credentials spinnaker-tutorial
+
+DECK_POD=$(kubectl get pods --namespace default -l "cluster=spin-deck" -o jsonpath="{.items[0].metadata.name}")
+
+kubectl port-forward --namespace default $DECK_POD 8080:9000 >> /dev/null &
+
+
+Go to cloudshell webpreview
+Go to applications -> sample
+Open pipelines and manually run the pipeline if it has not already running.
+Approve the deployment to production.
+Wait for few minutes
+
+Back to cloudshell, run to push a change
+
+gcloud config set compute/zone us-east1-b
+
+gcloud source repos clone sample-app
+
+cd sample-app
+
+touch a
+
+git config --global user.email "$(gcloud config get-value account)"
+
+git config --global user.name "Student"
+
+git commit -a -m "change"
+
+git tag v1.0.1
+
+git push --tags
+---
+
+Wait for few minutes if your progress is not checked
+Still not checked rerun the pipeline and push a change
+
+Congratulations! Done with the challenge lab.
