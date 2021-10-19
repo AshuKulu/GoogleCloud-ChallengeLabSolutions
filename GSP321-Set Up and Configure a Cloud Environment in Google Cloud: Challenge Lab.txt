@@ -71,20 +71,20 @@ cd wp-k8s
 
 sed -i s/username_goes_here/wp_user/g wp-env.yaml
 
-sed -i s/password_goes_here/ashukulu7/g wp-env.yaml
+sed -i s/password_goes_here/stormwind_rules/g wp-env.yaml
 
 kubectl create -f wp-env.yaml
 
-gcloud iam service-accounts keys create key.json \
-    --iam-account=cloud-sql-proxy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
+gcloud iam service-accounts keys create key.json --iam-account=cloud-sql-proxy@$GOOGLE_CLOUD_PROJECT.iam.gserviceaccount.com
     
-kubectl create secret generic cloudsql-instance-credentials \
-    --from-file key.json
+kubectl create secret generic cloudsql-instance-credentials --from-file key.json
 ---
 
 ##TASK 7 Create a WordPress deployment
 
-sed -i s/YOUR_SQL_INSTANCE/griffin-dev-db/g wp-deployment.yaml
+I=$(gcloud sql instances describe griffin-dev-db --format="value(connectionName)")
+
+sed -i s/YOUR_SQL_INSTANCE/$I/g wp-deployment.yaml
 
 kubectl create -f wp-deployment.yaml
 
