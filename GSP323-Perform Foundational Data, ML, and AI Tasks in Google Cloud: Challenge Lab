@@ -1,0 +1,168 @@
+Perform Foundational Data, ML, and AI Tasks in Google Cloud: Challenge Lab
+            https://github.com/AshuKulu
+            
+
+Cloud Storage > Browser > Create a bucket > Use GCP Project ID as bucket name > Create
+
+Activate Cloud Shell and run the following
+
+bq mk lab
+gsutil cp gs://cloud-training/gsp323/lab.csv .
+cat lab.csv
+gsutil cp gs://cloud-training/gsp323/lab.schema .
+cat lab.schema
+
+    Copy and Save output of lab.schema for next step
+    
+BigQuery > Open dataset 'lab' > Create table
+
+    Create table from > Google Cloud Storage
+    Select from GCS bucket = gs://cloud-training/gsp323/lab.csv
+    Table Name = customers
+    Under Schema > Edit as text
+        Paste the lab.schema output copied in previous step > Create Table
+
+##Task 1 : Run a simple Dataflow job
+
+  Dataflow > Jobs > Create job from template
+  Job name = lab-job
+  Dataflow template > Select 'Text Files on Cloud Storage to BigQuery'
+  For other fields use details from Qwiklabs page
+    (Note: Replace with your GCP Project ID)
+  Run Job
+  
+Wait for Job status to Succeed While waiting perform next task
+_ _ _ _ _
+
+##Task 2 : Run a simple Dataproc job
+
+  Dataproc > Create cluster > Create
+    Leave everything default
+    Wait sometime for cluster to create
+
+  Cluster details > VM Instances > SSH
+  
+  Run following in SSH window
+  
+    hdfs dfs -cp gs://cloud-training/gsp323/data.txt /data.txt
+    exit
+    
+  Jobs > Submit Job
+  
+  Keep Job ID and Region Default
+  Cluster > Select your created cluster
+  For other fields use details from Qwiklabs page
+  Submit
+  
+Wait for Job status to Succeed While waiting perform next task
+_ _ _ _ _
+
+##Task 3 : Run a simple Dataprep job
+
+Dataprep > Authenticate and Accept T&C
+    If any error occure, Logout and Login again
+    
+In Trifacta Console 
+  Import Data > Select Cloud Storage or GCS > Click Edit or Pen icon
+    put 'gs://cloud-training/gsp323/runs.csv' > Go
+    
+  Check Add to new flow, if missed click Create new flow > Continue
+   
+    1. After launching the Dataprep Transformer, scroll right to the end and select 'column10'.
+       In the Details pane, click 'FAILURE' under Unique Values to show the context menu.
+       Select 'Delete rows with selected values' to Remove all rows with the state of “FAILURE”, then click the Add button.
+       
+    2. Click the downward arrow next to column9, choose 'Filter rows' > 'On column value' > 'Contains'.
+       In the 'Filter rows' pane, enter the regex pattern '/(^0$|^0\.0$)/' to “Pattern to match”.
+       Select 'Delete matching rows' under the Action section, then click the Add button.
+    
+    3. Rename the Columns : runid
+                            userid
+                            labid
+                            lab_title
+                            start
+                            end
+                            time
+                            score
+                            state
+                            
+    Click Run Job.
+    
+Wait for Job status to Succeed While waiting perform next task
+_ _ _ _ _
+
+##Task 4: AI
+
+In Cloud Shell run the following
+  
+  gcloud iam service-accounts create my-natlang-sa --display-name "my natural language service account"
+
+  gcloud iam service-accounts keys create ~/key.json --iam-account my-natlang-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com
+
+  export GOOGLE_APPLICATION_CREDENTIALS="/home/$USER/key.json"
+
+  gcloud auth activate-service-account my-natlang-sa@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+
+  gcloud ml language analyze-entities --content="Old Norse texts portray Odin as one-eyed and long-bearded, frequently wielding a spear named Gungnir and wearing a cloak and a broad hat." > result.json
+
+  gcloud auth login
+      (Copy the token from the link provided)
+
+  gsutil cp result.json gs://<YOUR_PROJECT>-marking/task4-cnl.result
+      (Note: Replace with your GCP Project ID)     
+
+In the Cloud Console, APIs & Services > Credentials.
+Click on + CREATE CREDENTIALS > API key & Copy the API key
+
+  export API_KEY={Replace with API KEY}
+  
+  nano request.json
+  
+      Copy & Paste this Content :
+{
+  "config": {
+      "encoding":"FLAC",
+      "languageCode": "en-US"
+  },
+  "audio": {
+      "uri":"gs://cloud-training/gsp323/task4.flac"
+  }
+}
+
+  curl -s -X POST -H "Content-Type: application/json" --data-binary @request.json "https://speech.googleapis.com/v1/speech:recognize?key=${API_KEY}" > result.json
+
+  gsutil cp result.json gs://<YOUR_PROJECT>-marking/task4-gcs.result
+      (Note: Replace with your GCP Project ID)
+
+  gcloud iam service-accounts create quickstart
+
+  gcloud iam service-accounts keys create key.json --iam-account quickstart@${GOOGLE_CLOUD_PROJECT}.iam.gserviceaccount.com
+
+  gcloud auth activate-service-account --key-file key.json
+
+  export ACCESS_TOKEN=$(gcloud auth print-access-token)
+
+  nano request.json
+  
+      Copy & Paste this Content :
+{
+   "inputUri":"gs://spls/gsp154/video/chicago.mp4",
+   "features": [
+       "TEXT_DETECTION"
+   ]
+}
+
+  curl -s -H 'Content-Type: application/json' \
+    -H "Authorization: Bearer $ACCESS_TOKEN" \
+    'https://videointelligence.googleapis.com/v1/videos:annotate' \
+    -d @request.json
+
+  curl -s -H 'Content-Type: application/json' -H "Authorization: Bearer $ACCESS_TOKEN" 'https://videointelligence.googleapis.com/v1/operations/OPERATION_FROM_PREVIOUS_REQUEST' > result1.json
+
+  gsutil cp result1.json gs://<YOUR_PROJECT>-marking/task4-gvi.result
+      (Note: Replace with your GCP Project ID)
+_ _ _ _ _
+
+Wait for few minutes if your progress is not checked
+
+Congratulations! Done with the challenge lab.
