@@ -1,0 +1,85 @@
+GSP-324 Explore Machine Learning Models With Explainable AI
+              https://github.com/AshuKulu
+              
+
+##Task 1 : Create a new JupyterLab Notebook Instance
+           Wait about 3 min
+
+
+##Task 2 : Open JupyterLab > In your notebook terminal Clone the repo:
+
+git clone https://github.com/GoogleCloudPlatform/training-data-analyst
+
+Go to training-data-analyst > quests > dei > what-if-tool-challenge.ipynb
+
+
+##Task 3 : Build and Train your models
+Add following 3 codes at proper place else it will not work
+
+1>> In 'Train your first model' section
+    After #_ _ _ _ _TODO_ _ _ _ _ add following code
+    
+model = Sequential()
+model.add(layers.Dense(200, input_shape=(input_size,), activation='relu'))
+model.add(layers.Dense(50, activation='relu'))
+model.add(layers.Dense(20, activation='relu'))
+model.add(layers.Dense(1, activation='sigmoid'))
+model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
+model.fit(train_data, train_labels, epochs=10, batch_size=2048, validation_split=0.1)
+_ _ _ _ _
+
+2>> In 'Train your second model' section
+    After #_ _ _ _ _TODO_ _ _ _ _ add following code
+    
+limited_model = Sequential()
+limited_model.add(layers.Dense(200, input_shape=(input_size,), activation='relu'))
+limited_model.add(layers.Dense(50, activation='relu'))
+limited_model.add(layers.Dense(20, activation='relu'))
+limited_model.add(layers.Dense(1, activation='sigmoid'))
+limited_model.compile(loss='mean_squared_error', optimizer='adam', metrics=['accuracy'])
+limited_model.fit(limited_train_data, limited_train_labels, epochs=10, batch_size=2048, validation_split=0.1)
+_ _ _ _ _
+
+2>> In 'Using the What-if tool to interpret your model' section
+    After #_ _ _ _ _TODO_ _ _ _ _ add following code
+    
+config_builder = (WitConfigBuilder(
+    examples_for_wit[:num_datapoints],feature_names=column_names)
+    .set_custom_predict_fn(limited_custom_predict)
+    .set_target_feature('loan_granted')
+    .set_label_vocab(['denied', 'accepted'])
+    .set_compare_custom_predict_fn(custom_predict)
+    .set_model_name('limited')
+    .set_compare_model_name('complete'))
+WitWidget(config_builder, height=800)
+_ _ _ _ _
+
+4>> In 'Deploy your models to AI Platform' section
+    Replace #TODO with Your GCP Project ID
+
+
+##Task 4 : Deploy the models to AI Platform
+
+In Cloud Console > AI Platform > Models > Click Create Model
+
+    Model Name = complete_model
+
+Click Create, Then click on Model name > Click Create Version and use the following 
+
+    Version Name = v1
+    Python version = 3.7
+    Framework = TensorFlow
+    Framework version = 2.3.1
+    ML Runtime version = 2.3
+    For Model URI Click Browse > 'Your GCP Project Name >' > 'saved_complete_model/ >' > Click Select > Save
+
+While waiting for your model to deploy Create another model and repeat the above steps for creating version
+
+    Models > Create Model
+    Model Name = limited_model
+    For Model URI use 'saved_limited_model/'
+
+Wait about 10 mins to deploy 2 models
+_ _ _ _ _
+
+Congratulations! Done with the challenge lab.
