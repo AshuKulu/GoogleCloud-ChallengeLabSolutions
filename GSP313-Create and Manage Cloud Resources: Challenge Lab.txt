@@ -1,4 +1,7 @@
 Create and Manage Cloud Resources: Challenge Lab
+		For any assist & query Connect me :
+                	Linkedin : https://www.linkedin.com/in/sahoo-ashutosh/
+                	Discord : AshuKulu#6975
 
 Challenge Scenario:-
 		You have 3 taks to Complete
@@ -117,4 +120,3 @@ gcloud compute forwarding-rules list
 Wait for 5 minutes if your progress is not checked
 
 Congratulations! Done with the challenge lab.
-
