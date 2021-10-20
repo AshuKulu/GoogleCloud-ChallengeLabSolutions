@@ -1,5 +1,7 @@
 Integrate With Machine Learning APIs Challenge Lab
-              https://github.com/AshuKulu
+              For any assist & query Connect me :
+                  Linkedin : https://www.linkedin.com/in/sahoo-ashutosh/
+                  Discord : AshuKulu#6975
 
 ##Task - 1: Configure a service account to access the Machine Learning APIs, BigQuery, and Cloud Storage
 
