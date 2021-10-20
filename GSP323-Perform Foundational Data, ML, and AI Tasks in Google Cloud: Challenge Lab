@@ -14,7 +14,7 @@ cat lab.schema
 
     Copy and Save output of lab.schema for next step
     
-BigQuery > Open dataset 'lab' > Create table
+BigQuery > Select your project in the left pane > Open dataset 'lab' > Create table
 
     Create table from > Google Cloud Storage
     Select from GCS bucket = gs://cloud-training/gsp323/lab.csv
@@ -25,10 +25,27 @@ BigQuery > Open dataset 'lab' > Create table
 ##Task 1 : Run a simple Dataflow job
 
   Dataflow > Jobs > Create job from template
+  
   Job name = lab-job
+  
   Dataflow template > Select 'Text Files on Cloud Storage to BigQuery'
-  For other fields use details from Qwiklabs page
-    (Note: Replace with your GCP Project ID)
+  
+  JavaScript UDF path in Cloud Storage > gs://cloud-training/gsp323/lab.js
+  
+  JSON path > gs://cloud-training/gsp323/lab.schema
+  
+  JavaScript UDF name > transform
+  
+  BigQuery output table > YOUR_PROJECT:lab.customers
+            (Note: Replace 'YOUR_PROJECT' with your GCP Project ID)
+            
+  Cloud Storage input path > gs://cloud-training/gsp323/lab.csv
+  
+  Temporary BigQuery directory > gs://YOUR_PROJECT/bigquery_temp
+            (Note: Replace 'YOUR_PROJECT' with your GCP Project ID)
+            
+  Temporary location > gs://YOUR_PROJECT/temp
+            (Note: Replace 'YOUR_PROJECT' with your GCP Project ID)
   Run Job
   
 Wait for Job status to Succeed While waiting perform next task
@@ -50,8 +67,17 @@ _ _ _ _ _
   Jobs > Submit Job
   
   Keep Job ID and Region Default
+  
   Cluster > Select your created cluster
-  For other fields use details from Qwiklabs page
+  
+  Select Spark from the dropdown of “Job type”.
+  
+  Copy org.apache.spark.examples.SparkPageRank to “Main class or jar”.
+  
+  Copy file:///usr/lib/spark/examples/jars/spark-examples.jar to “Jar files”.
+  
+  Enter /data.txt to “Arguments”.
+  
   Submit
   
 Wait for Job status to Succeed While waiting perform next task
@@ -63,8 +89,8 @@ Dataprep > Authenticate and Accept T&C
     If any error occure, Logout and Login again
     
 In Trifacta Console 
-  Import Data > Select Cloud Storage or GCS > Click Edit or Pen icon
-    put 'gs://cloud-training/gsp323/runs.csv' > Go
+  Import Data > Select Cloud Storage or GCS > Click Edit or Pencil icon
+    paste 'gs://cloud-training/gsp323/runs.csv' to the textbox > Go
     
   Check Add to new flow, if missed click Create new flow > Continue
    
