@@ -1,5 +1,8 @@
 Insights From Data With Bigquery Challenge Lab
-              https://github.com/AshuKulu
+              For any assist & query Connect me :
+                  Linkedin : https://www.linkedin.com/in/sahoo-ashutosh/
+                  Discord : AshuKulu#6975
+              
 
 In the Cloud Console, navigate to BigQuery
 Click +ADD DATA > Explore public datasets > Search 'covid19_open_data' and then select 'COVID-19 Open Data'
