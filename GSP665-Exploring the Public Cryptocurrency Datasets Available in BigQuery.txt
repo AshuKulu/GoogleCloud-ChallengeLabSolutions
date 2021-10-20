@@ -1,3 +1,7 @@
+            For any assist & query Connect me :
+                Linkedin : https://www.linkedin.com/in/sahoo-ashutosh/
+                Discord : AshuKulu#6975
+
 ##Task 3:
 
 -- SQL source from https://cloud.google.com/blog/products/data-analytics/introducing-six-new-cryptocurrencies-in-bigquery-public-datasets-and-how-to-analyze-them
@@ -54,4 +58,4 @@ sum(value) as balance
 FROM double_entry_book
 where address = "1XPTgDRhN8RFnzniWCddobD9iKZatrvH4"
 
-Finished!!! Congratulations
+Congratulations! Done with the challenge lab.
