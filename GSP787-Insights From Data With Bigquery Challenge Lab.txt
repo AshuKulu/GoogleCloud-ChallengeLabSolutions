@@ -201,10 +201,14 @@ Hint: Do not use Explore with Data Studio option from BigQuery.
 You may fail to create a report for the first-time, login again to Data Studio. Click + Blank Report and accept the Terms of Service.
 Select a country and accept to continue
 Choose Bigquery and Authorize Data Studio to access BigQuery.
-In Public Datasets section choose your Qwiklab project then select 'covid19_open_data'
+In Public Datasets section choose your 'Qwiklab project ID' > select 'covid19_open_data' in public datasets > again select 'covid19_open_data' in table
+Or
+In Custom Query section choose your 'Qwiklab project ID' > run above query
+Click Add to report
 In the new Data Studio report, select Add a chart > Time series Chart.
 Add 'country_cases' and 'country_deaths' to the Metric field.
-In filter field select the date range equal to 2020-03-15 to 2020-04-30
+Scroll down to filter field > Add a filter > include > select a field 'date' > select a condition 'Equal to (=)' > choose date 2020-03-15
+Click 'AND' > include > select a field 'date' > select a condition 'Equal to (=)' > choose date 2020-04-30
 Click Save to commit the change.
 
 Wait for few minutes if your progress is not checked
