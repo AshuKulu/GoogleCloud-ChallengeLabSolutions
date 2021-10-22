@@ -23,14 +23,11 @@
 <h3 align="center"> Connect Me
     <br>
     
-    <br>
   <a href="https://www.linkedin.com/in/sahoo-ashutosh/">
     Linkedin
   </a>
     <br>
   Discord : AshuKulu#6975 
-    <br>
-    
     <br>
 
   Thank You
