@@ -8,6 +8,8 @@ Build and Secure Networks in Google Cloud: Challenge Lab
 Activate CloudShell and run the following
 
 gcloud compute firewall-rules delete open-access
+
+  Choose 'Y' to delete 'open-access' firewall rule
 #####
 
 
@@ -15,32 +17,34 @@ gcloud compute firewall-rules delete open-access
 
 
 gcloud compute instances start bastion
+
+  Choose 'n' for 'asia-southeast1-b' and let it choose the default region 'us-central1-b'
 #####
 
 
 ##Task 3:The bastion host is the one machine authorized to receive external SSH traffic. Create a firewall rule that allows SSH (tcp/22) from the IAP service.
   The firewall rule should be enabled on bastion via a network tag.
 
-gcloud compute firewall-rules create ssh-iap --allow=tcp:22 --source-ranges 35.235.240.0/20 --target-tags bastion --network acme-vpc
+gcloud compute firewall-rules create allow-ssh-iap --allow=tcp:22 --source-ranges 35.235.240.0/20 --target-tags <REPLACE WITH QWIKLAB GIVEN SSH IAP network tag> --network acme-vpc
 
-gcloud compute instances add-tags bastion --tags=bastion --zone=us-central1-b
+gcloud compute instances add-tags bastion --tags=<REPLACE WITH QWIKLAB GIVEN SSH IAP network tag> --zone=us-central1-b
 #####
 
 
 ##Task 4:The juice-shop server serves HTTP traffic. Create a firewall rule that allows traffic on HTTP (tcp/80) to any address. The firewall rule should be enabled on juice-shop via a network tag.
 
-gcloud compute firewall-rules create http-ingress --allow=tcp:80 --source-ranges 0.0.0.0/0 --target-tags allow-http --network acme-vpc
+gcloud compute firewall-rules create allow-http-ingress --allow=tcp:80 --source-ranges 0.0.0.0/0 --target-tags <REPLACE WITH QWIKLAB GIVEN HTTP network tag> --network acme-vpc
 
-gcloud compute instances add-tags juice-shop --tags=allow-http --zone=us-central1-b
+gcloud compute instances add-tags juice-shop --tags=<REPLACE WITH QWIKLAB GIVEN HTTP network tag> --zone=us-central1-b
 #####
 
 
 ##Task 5:You need to connect to juice-shop from the bastion using SSH. Create a firewall rule that allows traffic on SSH (tcp/22) from acme-mgmt-subnet network address. 
   The firewall rule should be enabled on juice-shop via a network tag.
 
-gcloud compute firewall-rules create allow-acme-mgmt-subnet --allow=tcp:22 --source-ranges 192.168.10.0/24 --target-tags juice-shop --network acme-vpc
+gcloud compute firewall-rules create allow-acme-mgmt-subnet --allow=tcp:22 --source-ranges 192.168.10.0/24 --target-tags <REPLACE WITH QWIKLAB GIVEN SSH internal network tag> --network acme-vpc
 
-gcloud compute instances add-tags juice-shop --tags=juice-shop --zone=us-central1-b
+gcloud compute instances add-tags juice-shop --tags=<REPLACE WITH QWIKLAB GIVEN SSH internal network tag> --zone=us-central1-b
 #####
 
 
