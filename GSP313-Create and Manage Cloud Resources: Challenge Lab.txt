@@ -10,7 +10,7 @@ Task 1: Create a project jumphost instance
 
 Go to: Navigation menu > Compute engine > VM Instance
 Write the below parameters, check machine type, and Image type.
-The name of instance must be "nucleus-jumphost"
+The name of instance must be "nucleus-jumphost-<Your Custum Name from Qwiklab Page>"
 Region be Default Region
 Zone be Default Zone
 The machine type be: 'f1-micro'
@@ -33,7 +33,7 @@ gcloud container clusters get-credentials nucleus-webserver1
 
 kubectl create deployment hello-app --image=gcr.io/google-samples/hello-app:2.0
 
-kubectl expose deployment hello-app --type=LoadBalancer --port 8080
+kubectl expose deployment hello-app --type=LoadBalancer --port <Your Custom port from Qwiklab page>
 
 kubectl get service 
 
