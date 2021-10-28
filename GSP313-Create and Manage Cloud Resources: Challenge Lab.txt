@@ -73,7 +73,7 @@ gcloud compute instances list
 
 4 .Create a firewall rule to allow traffic (80/tcp) :
 
-gcloud compute firewall-rules create www-firewall --allow tcp:80
+gcloud compute firewall-rules create <Your Custom Firewall rule from Qwiklab page> --allow tcp:80
 
 gcloud compute forwarding-rules create nginx-lb \
 --region us-east1 \
