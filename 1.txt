@@ -1,0 +1,89 @@
+Secure Workloads in Google Kubernetes Engine: Challenge Lab
+                              For any assist & query Connect me :
+                	Linkedin : https://www.linkedin.com/in/sahoo-ashutosh/
+
+1. Create kubernetes cluster.
+
+gsutil cp gs://spls/gsp335/gsp335.zip .
+unzip gsp335.zip
+gcloud container clusters create <Replace with Qwiklab given custom cluster name> --zone us-central1-c --machine-type n1-standard-4 --num-nodes 2 --enable-network-policy
+gcloud container clusters get-credentials <Replace with Qwiklab given custom cluster name> --zone us-central1-c
+
+2. Create Cloud SQL instance.
+
+gcloud sql instances create <Replace with Qwiklab given custom sql instance name> --region us-central1
+gcloud sql databases create wordpress --instance <Replace with Qwiklab given custom sql instance name> --charset utf8 --collation utf8_general_ci
+gcloud sql users create wordpress --host % --instance <Replace with Qwiklab given custom sql instance name> --password Password
+
+3. Create a service account.
+
+gcloud iam service-accounts create <Replace with Qwiklab given custom service account name>
+gcloud projects add-iam-policy-binding $DEVSHELL_PROJECT_ID --member="serviceAccount:<Replace with Qwiklab given custom service account name>@$DEVSHELL_PROJECT_ID.iam.gserviceaccount.com" --role="roles/cloudsql.client"
+gcloud iam service-accounts keys create key.json --iam-account=<Replace with Qwiklab given custom service account name>@$DEVSHELL_PROJECT_ID.iam.gserviceaccount.com
+
+4. Create the WordPress deployment and service.
+
+kubectl create secret generic cloudsql-instance-credentials --from-file key.json
+kubectl create secret generic cloudsql-db-credentials --from-literal username=wordpress --from-literal password='Password'
+kubectl create -f volume.yaml
+edit wordpress.yaml
+kubectl apply -f wordpress.yaml
+
+5. Setup Ingress with TLS.
+
+helm version
+helm repo add stable https://charts.helm.sh/stable
+helm repo update
+helm install nginx-ingress stable/nginx-ingress --set rbac.create=true
+kubectl get service nginx-ingress-controller -w
+
+. add_ip.sh
+
+kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.2.0/cert-manager.yaml
+
+kubectl create clusterrolebinding cluster-admin-binding \
+   --clusterrole=cluster-admin \
+   --user=$(gcloud config get-value core/account)
+
+edit issuer
+
+kubectl apply -f issuer.yaml
+
+edit ingress
+
+kubectl apply -f ingress.yaml
+
+6. Setup Network Policy.
+
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+   name: allow-world-to-nginx-ingress
+   namespace: default
+spec:
+   podSelector:
+      matchLabels:
+         app: nginx-ingress
+   policyTypes:
+   - Ingress
+   ingress:
+   - {}
+
+kubectl apply -f network-policy.yaml
+
+7. Setup Binary Authorization.
+
+enable binary authorization
+
+8. Setup Pod Security Policy.
+
+sed -i "s|extensions/v1beta1|extension/v1beta1|g" psp-restrictive.yaml
+kubectl apply -f psp-role.yaml
+kubectl apply -f psp-use.yaml
+kubectl apply -f psp-restrictive.yaml
+
+
+Wait for 5 minutes if your progress is not checked
+
+Congratulations! Done with the challenge lab.
